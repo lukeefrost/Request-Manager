@@ -130,6 +130,20 @@ class RequestController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $client = new Client();
+
+        $response = $client->post('http://127.0.0.1:8000/api/items/'.$id.'?_method=DELETE');
+
+        //dd($response);
+
+        $contents = json_decode($response->getBody()->getContents());
+
+        $success = $contents->success;
+
+        if ($success){
+            return redirect()->to('/')->with('success', 'Item deleted successfully!');
+        } else {
+            return redirect()->to('/')->with('error', 'Item could not be deleted.');
+        }
     }
 }

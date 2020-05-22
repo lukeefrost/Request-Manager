@@ -11,6 +11,11 @@
             <h5 class="mb-1">{{ $item->text }}</h5>
             <small>{{ $item->created_at}}</small>
           </div>
+          <form action="/request/{{ $item->id }}" method="post">
+            @csrf
+            @method('DELETE')
+            <button type="submit" name="button" class="btn btn-danger float-right">Delete</button>
+          </form>
           <p class="mb-1">{{ $item->body }}</p>
         </a>
         @endforeach
