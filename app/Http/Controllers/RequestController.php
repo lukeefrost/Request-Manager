@@ -16,7 +16,7 @@ class RequestController extends Controller
     public function index()
     {
         $client = new Client();
-        $response = $client->get('http:://127.0.0.1:8000/api/items');
+        $response = $client->get('http://127.0.0.1:8000/api/items');
         //dd($response);
         $items = json_decode($response->getBody()->getContents());
         return view('index')->with('items', $items);
@@ -29,26 +29,7 @@ class RequestController extends Controller
      */
     public function create()
     {
-        $this->validate($request, [
-          'text' => 'required',
-          'body' => 'required'
-        ]);
-
-        $client = new Client();
-
-        try {
-          $response = $client->post('http://127.0.0.1:8000/api/items?text='.$request->input('text').'&body='.$request->input('body'));
-      } catch(RequestException $e) {
-          if ($e->hasResponse()) {
-            $msg = $e->getResponse();
-          } else {
-            $msg = 'The item could not be inserted.';
-          }
-          return redirect()->to('/')->with('error', $msg);
-      }
-        //dd($request);
-
-        return redirect()->to('/')->with('success', 'Item inserted successfully!');
+        return view('create');
     }
 
     /**
@@ -59,7 +40,26 @@ class RequestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $this->validate($request, [
+        'text' => 'required',
+        'body' => 'required'
+      ]);
+
+      $client = new Client();
+
+      try {
+        $response = $client->post('http://127.0.0.1:8000/api/items?text='.$request->input('text').'&body='.$request->input('body'));
+    } catch(RequestException $e) {
+        if ($e->hasResponse()) {
+          $msg = $e->getResponse();
+        } else {
+          $msg = 'The item could not be inserted.';
+        }
+        return redirect()->to('/')->with('error', $msg);
+    }
+      //dd($request);
+
+      return redirect()->to('/')->with('success', 'Item inserted successfully!');
     }
 
     /**
